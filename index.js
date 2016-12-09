@@ -1,29 +1,17 @@
 #!/usr/bin/env node
-var commander = require('commander');
-var program = require('./lib/program.js');
-var transl = require('./lib/transl.js');
+const commander = require('commander')
+const program = require('./lib/program.js')
+const transl = require('./lib/transl.js')
 
-var SaySomehting = require('say-something');
-    saySomething = new SaySomehting({ language: 'pt-br' });
+const SaySomehting = require('say-something')
  
- //Say something 
- // saySomething.now('Eu estou falando!');
- 
- //When start talking 
- // saySomething.on('talking', function (text) {
- //   console.log('Comecei a falar: ' + text);
- // });
- 
- //After stop talking 
- // saySomething.on('done', function () {
- //   console.log('Terminei de falar');
- // });
 commander
   .arguments('<language> <keyword>')
   .usage(program.help())
   .action(function(language) {
-    var argumentsFormatted = program.formatCliArguments(language, arguments);
+    const argumentsFormatted = program.formatCliArguments(language, arguments)
 
+    saySomething = new SaySomehting({language})
     transl.translate(
       argumentsFormatted.sourceLanguage,
       argumentsFormatted.translateLanguage,
@@ -31,10 +19,10 @@ commander
       true,
       function(result) {
         let _r = result.split(' ')
-        let word = _r[_r.length-1]
-        saySomething.now(word);
-        console.log(result);
+        let word = _r.slice(1).join(' ')
+        saySomething.now(word)
+        console.log(word, result)
       }
-    );
+    )
   })
-  .parse(process.argv);
+  .parse(process.argv)
